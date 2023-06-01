@@ -1,0 +1,15 @@
+html, body {
+    height: 100%;
+}
+
+textarea {
+    display: inline-block;
+    width: 100%;
+    height: calc(30vh);
+}
+
+button {
+    display: inline-block;
+    width: 100%;
+    height: calc(10vh);
+}
