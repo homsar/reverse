@@ -12,8 +12,58 @@ function copy_text() {
     navigator.clipboard.writeText(copyText.value);
 }
 
-function reverse_text(the_text) {
-    return the_text.split('\n').map(line => line.split(' ').reverse().join(' ')).join('\n');
+
+function reverse_single_name(name) {
+    var split_name = name.split(' ');
+    if (split_name.length == 2) {
+	return split_name.reverse().join(' ');
+    } else {
+	return name;
+    }
+}
+
+
+function reverse_line(the_line) {
+    var output_line = "";
+    var current_name = "";
+
+    for (var char_idx = 0; char_idx < the_line.length; char_idx++) {
+	var current_char = the_line[char_idx];
+
+	if ((char_idx == the_line.length - 1) && (current_char != ")")) {
+	    current_name = current_name + current_char;
+	    output_line = output_line + reverse_single_name(current_name);
+
+	} else if ('),:'.includes(current_char)) {
+	    output_line = output_line + reverse_single_name(current_name) + current_char;
+	    current_name = "";
+
+	} else if ('('.includes(current_char)) {
+	    if (current_name.substring(current_name.length - 1) == " ") {
+		current_char = " " + current_char;
+		current_name = current_name.substring(0, current_name.length - 1);
+	    }
+
+	    output_line = output_line + reverse_single_name(current_name) + current_char;
+	    current_name = "";
+
+	} else {
+	    current_name = current_name + current_char;
+	    if (current_name.substring(current_name.length - 5) == " and ") {
+		output_line = output_line + reverse_single_name(current_name.substring(0, current_name.length - 5)) + " and ";
+		current_name = "";
+
+	    } else if ((current_name == " ") || (current_name == "and ")) {
+		output_line = output_line + current_name;
+		current_name = "";
+	    }
+	}
+    }
+    return output_line;
+}
+
+function reverse_all(the_text) {
+    return the_text.split('\n').map(reverse_line).join('\n');
 }
 
 
@@ -23,7 +73,7 @@ window.onload = function() {
 
     from_text.addEventListener(
 	'input', function() {
-	    to_text.value = reverse_text(from_text.value);
+	    to_text.value = reverse_all(from_text.value);
 	}
     );
 }
