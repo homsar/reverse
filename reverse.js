@@ -53,6 +53,10 @@ function reverse_line(the_line) {
 		output_line = output_line + reverse_single_name(current_name.substring(0, current_name.length - 5)) + " and ";
 		current_name = "";
 
+	    } else if (/^CV[^A-Za-z0-9]? $/.test(current_name)) {
+		output_line = output_line + "CV: ";
+		current_name = "";
+
 	    } else if ((current_name == " ") || (current_name == "and ")) {
 		output_line = output_line + current_name;
 		current_name = "";
