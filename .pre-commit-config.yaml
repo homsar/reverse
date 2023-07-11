@@ -1,0 +1,12 @@
+repos:
+-   repo: https://github.com/Lucas-C/pre-commit-hooks-nodejs
+    rev: v1.1.2
+    hooks:
+    -   id: htmlhint
+        # optional custom config:
+        args: [--config, .htmlhintrc]
+    -   id: htmllint
+-   repo: https://github.com/pre-commit/mirrors-jshint
+    rev: v2.13.6
+    hooks:
+    -   id: jshint
