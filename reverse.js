@@ -1,83 +1,74 @@
-function copy_text() {
-    /* Thanks to w3schools https://www.w3schools.com/howto/howto_js_copy_clipboard.asp */
-  
-    // Get the text field
-    let copyText = document.getElementById("to");
+function copyText () { // eslint-disable-line no-unused-vars
+  /* Thanks to w3schools https://www.w3schools.com/howto/howto_js_copy_clipboard.asp */
 
-    // Select the text field
-    copyText.select(); 
-    copyText.setSelectionRange(0, 99999); // For mobile devices
+  // Get the text field
+  const copyText = document.getElementById('to')
 
-    // Copy the text inside the text field
-    navigator.clipboard.writeText(copyText.value);
+  // Select the text field
+  copyText.select()
+  copyText.setSelectionRange(0, 99999) // For mobile devices
+
+  // Copy the text inside the text field
+  navigator.clipboard.writeText(copyText.value)
 }
 
+function reverseSingleName (name) {
+  const splitName = name.split(' ')
+  if (splitName.length === 2) {
+    return splitName.reverse().join(' ')
+  } else {
+    return name
+  }
+}
 
-function reverse_single_name(name) {
-    let split_name = name.split(' ');
-    if (split_name.length == 2) {
-	return split_name.reverse().join(' ');
+function reverseLine (theLine) {
+  let outputLine = ''
+  let currentName = ''
+
+  for (let charIdx = 0; charIdx < theLine.length; charIdx++) {
+    let currentChar = theLine[charIdx]
+
+    if ((charIdx === theLine.length - 1) && (currentChar !== ')')) {
+      currentName = currentName + currentChar
+      outputLine = outputLine + reverseSingleName(currentName)
+    } else if ('),:'.includes(currentChar)) {
+      outputLine = outputLine + reverseSingleName(currentName) + currentChar
+      currentName = ''
+    } else if ('('.includes(currentChar)) {
+      if (currentName.substring(currentName.length - 1) === ' ') {
+        currentChar = ' ' + currentChar
+        currentName = currentName.substring(0, currentName.length - 1)
+      }
+      outputLine = outputLine + reverseSingleName(currentName) + currentChar
+      currentName = ''
     } else {
-	return name;
+      currentName = currentName + currentChar
+      if (currentName.substring(currentName.length - 5) === ' and ') {
+        outputLine = outputLine + reverseSingleName(currentName.substring(0, currentName.length - 5)) + ' and '
+        currentName = ''
+      } else if (/^CV[^A-Za-z0-9]? $/.test(currentName)) {
+        outputLine = outputLine + 'CV: '
+        currentName = ''
+      } else if ((currentName === ' ') || (currentName === 'and ')) {
+        outputLine = outputLine + currentName
+        currentName = ''
+      }
     }
+  }
+  return outputLine
 }
 
+function reverseAll (theText) {
+  return theText.split('\n').map(reverseLine).join('\n')
+}
 
-function reverse_line(the_line) {
-    var output_line = "";
-    var current_name = "";
+window.onload = function () {
+  const fromText = document.getElementById('from')
+  const toText = document.getElementById('to')
 
-    for (var char_idx = 0; char_idx < the_line.length; char_idx++) {
-	var current_char = the_line[char_idx];
-
-	if ((char_idx == the_line.length - 1) && (current_char != ")")) {
-	    current_name = current_name + current_char;
-	    output_line = output_line + reverse_single_name(current_name);
-
-	} else if ('),:'.includes(current_char)) {
-	    output_line = output_line + reverse_single_name(current_name) + current_char;
-	    current_name = "";
-
-	} else if ('('.includes(current_char)) {
-	    if (current_name.substring(current_name.length - 1) == " ") {
-		current_char = " " + current_char;
-		current_name = current_name.substring(0, current_name.length - 1);
-	    }
-
-	    output_line = output_line + reverse_single_name(current_name) + current_char;
-	    current_name = "";
-
-	} else {
-	    current_name = current_name + current_char;
-	    if (current_name.substring(current_name.length - 5) == " and ") {
-		output_line = output_line + reverse_single_name(current_name.substring(0, current_name.length - 5)) + " and ";
-		current_name = "";
-
-	    } else if (/^CV[^A-Za-z0-9]? $/.test(current_name)) {
-		output_line = output_line + "CV: ";
-		current_name = "";
-
-	    } else if ((current_name == " ") || (current_name == "and ")) {
-		output_line = output_line + current_name;
-		current_name = "";
-	    }
-	}
+  fromText.addEventListener(
+    'input', function () {
+      toText.value = reverseAll(fromText.value)
     }
-    return output_line;
+  )
 }
-
-function reverse_all(the_text) {
-    return the_text.split('\n').map(reverse_line).join('\n');
-}
-
-
-window.onload = function() {
-    let from_text = document.getElementById('from');
-    let to_text = document.getElementById('to');
-
-    from_text.addEventListener(
-	'input', function() {
-	    to_text.value = reverse_all(from_text.value);
-	}
-    );
-};
