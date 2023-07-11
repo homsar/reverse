@@ -2,7 +2,7 @@ function copy_text() {
     /* Thanks to w3schools https://www.w3schools.com/howto/howto_js_copy_clipboard.asp */
   
     // Get the text field
-    var copyText = document.getElementById("to");
+    let copyText = document.getElementById("to");
 
     // Select the text field
     copyText.select(); 
@@ -14,7 +14,7 @@ function copy_text() {
 
 
 function reverse_single_name(name) {
-    var split_name = name.split(' ');
+    let split_name = name.split(' ');
     if (split_name.length == 2) {
 	return split_name.reverse().join(' ');
     } else {
@@ -80,4 +80,4 @@ window.onload = function() {
 	    to_text.value = reverse_all(from_text.value);
 	}
     );
-}
+};
